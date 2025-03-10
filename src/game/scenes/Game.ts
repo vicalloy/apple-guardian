@@ -17,11 +17,11 @@ export class MainScene extends Phaser.Scene {
       this.createApples();
 
       // Start the game timer
-      this.time.delayedCall(60000, this.endGame, [], this);
+      this.time.delayedCall(30000, this.endGame, [], this);
   
       // Start falling letters
       this.letterTimer = this.time.addEvent({
-        delay: 1000, // Delay between each letter
+        delay: 800, // Delay between each letter
         callback: this.dropLetter,
         callbackScope: this,
         loop: true
@@ -55,7 +55,7 @@ export class MainScene extends Phaser.Scene {
       this.physics.add.existing(letter);
       const body = letter.body as Phaser.Physics.Arcade.Body;
       if (body) {
-        body.setVelocityY(800); // Increase the falling speed
+        body.setVelocityY(300); // Increase the falling speed
       }
   
       this.activeLetters.push(letter);
