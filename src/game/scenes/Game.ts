@@ -14,6 +14,8 @@ export class MainScene extends Phaser.Scene {
     }
   
     startGame() {
+      this.createApples();
+
       // Start the game timer
       this.time.delayedCall(60000, this.endGame, [], this);
   
@@ -67,7 +69,7 @@ export class MainScene extends Phaser.Scene {
       }, undefined, this);
     }
   
-    create() {
+    createApples() {
       this.physics.world.setBoundsCollision(true, true, false, false); // Allow letters to fall off the bottom
   
       const columns = 12;
@@ -83,20 +85,10 @@ export class MainScene extends Phaser.Scene {
         this.physics.add.existing(apple);
         this.applesMap[i] = apple;
       }
-  
-      // Add a start button
-      const startButton = this.add.text(width / 2, height / 2, 'Start Game', {
-        fontSize: '32px',
-        backgroundColor: '#000',
-        color: '#fff',
-        padding: { x: 10, y: 5 },
-      }).setOrigin(0.5);
-  
-      startButton.setInteractive();
-      startButton.on('pointerdown', () => {
-        startButton.setVisible(false); // Hide the start button
-        this.startGame(); // Start the game logic
-      });
+
+    }
+    create() {
+      this.startGame(); // Start the game logic
     }
   
     update() {

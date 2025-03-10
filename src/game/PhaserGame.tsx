@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import { EventBus } from './EventBus';
 import { MainScene } from './scenes/Game';
+import { HomeScene } from './scenes/HomeScene';
 import Phaser from 'phaser';
 
 export interface IRefPhaserGame
@@ -26,7 +27,8 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(function PhaserGame
                 type: Phaser.AUTO,
                 width: 800,
                 height: 600,
-                scene: MainScene,
+                scene: [HomeScene, MainScene],
+    activeScene: HomeScene,
                 physics: {
                     default: 'arcade',
                     arcade: {
