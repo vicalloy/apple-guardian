@@ -55,7 +55,7 @@ export class MainScene extends Phaser.Scene {
       this.physics.add.existing(letter);
       const body = letter.body as Phaser.Physics.Arcade.Body;
       if (body) {
-        body.setVelocityY(400); // Increase the falling speed
+        body.setVelocityY(800); // Increase the falling speed
       }
   
       this.activeLetters.push(letter);
@@ -64,6 +64,12 @@ export class MainScene extends Phaser.Scene {
         if (this.applesMap[columnIndex]) {
           this.applesMap[columnIndex].destroy();
           delete this.applesMap[columnIndex];
+          
+          // 检查是否所有苹果都被消除
+          if (Object.keys(this.applesMap).length === 0) {
+            this.letterTimer.destroy(); // 停止字母下落定时器
+            this.endGame();
+          }
         }
         (letterObj as Phaser.GameObjects.Text).destroy();
       }, undefined, this);
@@ -96,8 +102,8 @@ export class MainScene extends Phaser.Scene {
     }
   
     endGame() {
-      // Check if any apples are left and display the appropriate message
-      // Offer a restart option
+      const hasSuccess = Object.keys(this.applesMap).length > 0;
+      this.scene.start('HomeScene', { success: hasSuccess });
+      this.scene.stop();
     }
-  }
-  
+}

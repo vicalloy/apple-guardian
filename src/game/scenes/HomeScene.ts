@@ -27,4 +27,8 @@ export class HomeScene extends Phaser.Scene {
         // 触发场景就绪事件
         this.events.emit('current-scene-ready', this);
     }
+
+    init(data: { success: boolean }) {
+      this.data.set('success', data?.success);
+    }
 }
