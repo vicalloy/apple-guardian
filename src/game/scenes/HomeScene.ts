@@ -7,6 +7,22 @@ export class HomeScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+
+        if (this.data.get('success') != undefined) {
+          let hint = '';
+          if (this.data.get('success')) {
+              hint = 'You Win';
+          } else {
+              hint = 'Game Over';
+          }
+          const _ = this.add.text(width / 2, height / 2 - 48, hint, {
+            fontSize: '32px',
+            backgroundColor: '#000',
+            color: '#fff',
+            padding: { x: 10, y: 5 },
+          }).setOrigin(0.5);
+        }
+
         
         // 创建开始按钮
         const startButton = this.add.text(width / 2, height / 2, 'Start Game', {
