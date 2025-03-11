@@ -50,7 +50,7 @@ export class MainScene extends Phaser.Scene {
       const validColumns = Object.keys(this.applesMap).map(Number);
       const columnIndex = validColumns[Phaser.Math.Between(0, validColumns.length - 1)];
       const x = columnIndex * columnWidth - 10 + columnWidth / 2;
-      const letter = this.add.text(x, 0, randomLetter, { fontSize: '32px', color: '#fff' });
+      const letter = this.add.text(x, 0, `${randomLetter}\n🐛`, { fontSize: '32px', color: '#fff' });
   
       this.physics.add.existing(letter);
       const body = letter.body as Phaser.Physics.Arcade.Body;
