@@ -124,7 +124,7 @@ export class MainScene extends Phaser.Scene {
 
   endGame() {
     const hasSuccess = Object.keys(this.applesMap).length > 0;
-    this.scene.start('HomeScene', { success: hasSuccess });
+    this.scene.start('HomeScene', { success: hasSuccess, level: this.data.get('level') });
     this.scene.stop();
   }
 }

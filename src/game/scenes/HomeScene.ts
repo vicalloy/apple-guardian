@@ -24,8 +24,10 @@ export class HomeScene extends Phaser.Scene {
       }).setOrigin(0.5);
     }
 
+    const selectedLevel = this.data.get('selectedLevel');
+
     // 创建Level显示
-    const levelText = this.add.text(width / 2, height / 2 + 48, 'Level 1', {
+    const levelText = this.add.text(width / 2, height / 2 + 48, `Level ${selectedLevel}`, {
       fontSize: '28px',
       color: '#ffd700',
       backgroundColor: '#000',
@@ -49,9 +51,6 @@ export class HomeScene extends Phaser.Scene {
     const mainContainer = this.add.container(0, 0, homeChildren);
     const levelSelectContainer = this.add.container(width, 0);
 
-    // 初始化Level数据
-    this.data.set('selectedLevel', 1);
-
     // Level文本点击事件
     levelText.on('pointerdown', () => {
       mainContainer.setVisible(false);
@@ -66,7 +65,7 @@ export class HomeScene extends Phaser.Scene {
           `Level ${i}`,
           {
             fontSize: '28px',
-            color: i === this.data.get('selectedLevel') ? '#ffd700' : '#fff',
+            color: i === selectedLevel ? '#ffd700' : '#fff',
             backgroundColor: '#333',
             padding: { x: 20, y: 10 }
           }
@@ -110,8 +109,6 @@ export class HomeScene extends Phaser.Scene {
 
   init(data: { success: boolean; level?: number }) {
     this.data.set('success', data?.success);
-    if (data?.level) {
-      this.data.set('selectedLevel', data.level);
-    }
+    this.data.set('selectedLevel', data?.level ?? 1);
   }
 }
