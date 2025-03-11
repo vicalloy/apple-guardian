@@ -80,6 +80,8 @@ export class MainScene extends Phaser.Scene {
     const body = letter.body as Phaser.Physics.Arcade.Body;
     if (body) {
       body.setVelocityY(this.gameVelocity);
+      body.setCollideWorldBounds(true);
+      body.onWorldBounds = true;
     }
 
     this.activeLetters[randomLetter] = letter;
@@ -101,7 +103,15 @@ export class MainScene extends Phaser.Scene {
   }
 
   createApples() {
-    this.physics.world.setBoundsCollision(true, true, false, false); // Allow letters to fall off the bottom
+    this.physics.world.setBoundsCollision(true, true, true, true);
+    this.physics.world.on('worldbounds', (body: Phaser.Physics.Arcade.Body) => {
+      const letter = body.gameObject as Phaser.GameObjects.Text;
+      if (body.blocked.down) {
+        const letterKey = letter.text.split('\n')[0].toUpperCase();
+        delete this.activeLetters[letterKey];
+        letter.destroy();
+      }
+    });
 
     const columns = 12;
     const appleEmoji = '🍎';
