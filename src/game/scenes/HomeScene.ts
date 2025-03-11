@@ -29,7 +29,7 @@ export class HomeScene extends Phaser.Scene {
     // 创建Level显示
     const levelText = this.add.text(width / 2, height / 2 + 48, `Level ${selectedLevel}`, {
       fontSize: '28px',
-      color: '#ffd700',
+      color: '#fff',
       backgroundColor: '#000',
       padding: { x: 10, y: 5 }
     }).setOrigin(0.5).setInteractive();
