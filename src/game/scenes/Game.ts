@@ -36,7 +36,7 @@ export class MainScene extends Phaser.Scene {
 
   startGame() {
     const level = this.data.get('level') || 1;
-    this.remainLetterCount = 180;
+    this.remainLetterCount = 60;
     this.activeLetters = {};
     this.createApples();
 
