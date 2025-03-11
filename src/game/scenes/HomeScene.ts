@@ -28,8 +28,8 @@ export class HomeScene extends Phaser.Scene {
       }
       resultText = this.add.text(width / 2, height / 2 - 48, hint, {
         fontSize: '32px',
-        backgroundColor: '#000',
         color: '#fff',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         padding: { x: 10, y: 5 },
       }).setOrigin(0.5);
     }
@@ -40,15 +40,15 @@ export class HomeScene extends Phaser.Scene {
     const levelText = this.add.text(width / 2, height / 2 + 48, `Level ${selectedLevel}`, {
       fontSize: '28px',
       color: '#fff',
-      backgroundColor: '#000',
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
       padding: { x: 10, y: 5 }
     }).setOrigin(0.5).setInteractive();
 
     // 创建开始按钮
     const startButton = this.add.text(width / 2, height / 2, 'Start Game', {
       fontSize: '32px',
-      backgroundColor: '#000',
       color: '#fff',
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
       padding: { x: 10, y: 5 },
     }).setOrigin(0.5);
 
@@ -76,7 +76,7 @@ export class HomeScene extends Phaser.Scene {
           {
             fontSize: '28px',
             color: i === this.data.get('selectedLevel') ? '#ffd700' : '#fff',
-            backgroundColor: '#333',
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
             padding: { x: 20, y: 10 }
           }
         ).setOrigin(0.5).setInteractive();
@@ -94,7 +94,7 @@ export class HomeScene extends Phaser.Scene {
       const backButton = this.add.text(width / 2, height - 50, 'Back', {
         fontSize: '24px',
         color: '#fff',
-        backgroundColor: '#666',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
         padding: { x: 10, y: 5 }
       }).setOrigin(0.5).setInteractive();
 
