@@ -10,8 +10,7 @@ export class MainScene extends Phaser.Scene {
     super({ key: 'MainScene' });
   }
 
-  init(data: { success: boolean; level?: number }) {
-    this.data.set('success', data?.success);
+  init(data: { level?: number }) {
     if (data?.level) {
       this.data.set('level', data.level);
     }
