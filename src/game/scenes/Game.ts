@@ -68,10 +68,24 @@ export class MainScene extends Phaser.Scene {
 
     // Add keyboard input handling
     this.input.keyboard.on('keydown', (event: KeyboardEvent) => {
-      const keyPressed = event.key.toUpperCase();
-      if (this.activeLetters[keyPressed]) {
-        this.activeLetters[keyPressed].destroy();
-        delete this.activeLetters[keyPressed];
+      const key = event.key.toUpperCase();
+      if (this.activeLetters[key]) {
+        // 创建粒子爆炸效果
+        const letter = this.activeLetters[key];
+        const emitter = this.add.particles(letter.x, letter.y, 'flares', {
+          frame: 'white',
+          scale: { start: 0.2, end: 0.5 },
+          speed: { min: -300, max: 300 },
+          lifespan: 800,
+          gravityY: 400,
+          blendMode: 'ADD',
+          emitZone: { type: 'random', quantity: 10 } as Phaser.Types.GameObjects.Particles.EmitZoneData
+        });
+
+        emitter.explode(100);
+        this.time.delayedCall(100, () => emitter.destroy());
+        this.activeLetters[key].destroy();
+        delete this.activeLetters[key];
         this.sound.play('type', { volume: 1 });
         if (this.isGameOver()) {
           this.endGame();
@@ -152,9 +166,9 @@ export class MainScene extends Phaser.Scene {
   }
   create() {
     // 添加背景图
-    const bg = this.add.image(this.scale.width/2, this.scale.height/2, 'bg')
+    const bg = this.add.image(this.scale.width / 2, this.scale.height / 2, 'bg')
       .setOrigin(0.5);
-    bg.setScale(this.scale.width/bg.width, this.scale.height/bg.height)
+    bg.setScale(this.scale.width / bg.width, this.scale.height / bg.height)
       .setDepth(-1);
 
     this.startGame(); // Start the game logic
