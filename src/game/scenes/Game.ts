@@ -18,6 +18,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('bg', 'assets/bg.png');
     // Load any assets here if needed
     this.load.audio('type', 'assets/sound/type.wav');
     this.load.audio('wrong', 'assets/sound/wrong.mp3');
@@ -150,6 +151,12 @@ export class MainScene extends Phaser.Scene {
 
   }
   create() {
+    // 添加背景图
+    const bg = this.add.image(this.scale.width/2, this.scale.height/2, 'bg')
+      .setOrigin(0.5);
+    bg.setScale(this.scale.width/bg.width, this.scale.height/bg.height)
+      .setDepth(-1);
+
     this.startGame(); // Start the game logic
   }
 

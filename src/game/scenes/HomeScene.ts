@@ -5,9 +5,19 @@ export class HomeScene extends Phaser.Scene {
     super({ key: 'HomeScene' });
   }
 
-  create() {
-    const { width, height } = this.scale;
+  preload() {
+    this.load.image('bg', 'assets/bg.png');
+  }
 
+  create() {
+    // 添加背景图
+    const bg = this.add.image(this.scale.width/2, this.scale.height/2, 'bg')
+      .setOrigin(0.5);
+    bg.setScale(this.scale.width/bg.width, this.scale.height/bg.height)
+      .setDepth(-1);
+
+    const { width, height } = this.scale;
+    
     let resultText;
     if (this.data.get('success') != undefined) {
       let hint = '';
@@ -65,7 +75,7 @@ export class HomeScene extends Phaser.Scene {
           `Level ${i}`,
           {
             fontSize: '28px',
-            color: i === selectedLevel ? '#ffd700' : '#fff',
+            color: i === this.data.get('selectedLevel') ? '#ffd700' : '#fff',
             backgroundColor: '#333',
             padding: { x: 20, y: 10 }
           }
