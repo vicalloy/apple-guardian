@@ -5,6 +5,7 @@ export class MainScene extends Phaser.Scene {
   private applesMap: { [key: number]: Phaser.GameObjects.Text } = {};
   private activeLetters: { [key: string]: Phaser.GameObjects.Text } = {};
   private gameVelocity: number;
+  private remainLetterCount: number;
 
   constructor() {
     super({ key: 'MainScene' });
@@ -22,8 +23,19 @@ export class MainScene extends Phaser.Scene {
     this.load.audio('wrong', 'assets/sound/wrong.mp3');
   }
 
+  isGameOver() {
+    if (Object.keys(this.applesMap).length === 0) {
+      return true;
+    }
+    if (this.remainLetterCount <= 0 && Object.keys(this.activeLetters).length === 0) {
+      return true;
+    }
+    return false;
+  }
+
   startGame() {
     const level = this.data.get('level') || 1;
+    this.remainLetterCount = 180;
     this.activeLetters = {};
     this.createApples();
 
@@ -35,13 +47,17 @@ export class MainScene extends Phaser.Scene {
     const velocityY = baseSpeed * (speedIncrementRate ** (level - 1));
     const spawnDelay = baseInterval / (speedIncrementRate ** (level - 1));
 
-    // Start the game timer
-    this.time.delayedCall(30000, this.endGame, [], this);
-
     // Start falling letters with dynamic interval
     this.letterTimer = this.time.addEvent({
       delay: spawnDelay,
-      callback: this.dropLetter,
+      callback: () => {
+        if (this.remainLetterCount > 0) {
+          this.dropLetter();
+          this.remainLetterCount--;
+        } else {
+          this.letterTimer.destroy();
+        }
+      },
       callbackScope: this,
       loop: true
     });
@@ -56,6 +72,9 @@ export class MainScene extends Phaser.Scene {
         this.activeLetters[keyPressed].destroy();
         delete this.activeLetters[keyPressed];
         this.sound.play('type', { volume: 1 });
+        if (this.isGameOver()) {
+          this.endGame();
+        }
       } else {
         this.sound.play('wrong', { volume: 1 });
       }
@@ -93,8 +112,7 @@ export class MainScene extends Phaser.Scene {
         this.applesMap[columnIndex].destroy();
         delete this.applesMap[columnIndex];
 
-        if (Object.keys(this.applesMap).length === 0) {
-          this.letterTimer.destroy();
+        if (this.isGameOver()) {
           this.endGame();
         }
       }
@@ -110,6 +128,9 @@ export class MainScene extends Phaser.Scene {
         const letterKey = letter.text.split('\n')[0].toUpperCase();
         delete this.activeLetters[letterKey];
         letter.destroy();
+      }
+      if (this.isGameOver()) {
+        this.endGame();
       }
     });
 
@@ -137,6 +158,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   endGame() {
+    this.letterTimer.destroy();
     const hasSuccess = Object.keys(this.applesMap).length > 0;
     this.scene.start('HomeScene', { success: hasSuccess, level: this.data.get('level') });
     this.scene.stop();
