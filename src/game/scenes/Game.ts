@@ -3,7 +3,8 @@ import Phaser from 'phaser';
 export class MainScene extends Phaser.Scene {
     private letterTimer: Phaser.Time.TimerEvent;
     private applesMap: { [key: number]: Phaser.GameObjects.Text } = {};
-    private activeLetters: Phaser.GameObjects.Text[] = [];
+    private activeLetters: { [key: string]: Phaser.GameObjects.Text } = {};
+    private activeLettersSet: Set<string> = new Set();
   
     constructor() {
       super({ key: 'MainScene' });
@@ -14,6 +15,7 @@ export class MainScene extends Phaser.Scene {
     }
   
     startGame() {
+      this.activeLetters = {};
       this.createApples();
 
       // Start the game timer
@@ -30,21 +32,19 @@ export class MainScene extends Phaser.Scene {
       // Add keyboard input handling
       this.input.keyboard.on('keydown', (event: KeyboardEvent) => {
         const keyPressed = event.key.toUpperCase();
-        const remainingLetters: Phaser.GameObjects.Text[] = [];
-        this.activeLetters.forEach((letter) => {
-          if (letter?.text?.toUpperCase() === keyPressed) {
-            letter.destroy();
-          } else if (letter) {
-            remainingLetters.push(letter);
-          }
-        });
-        this.activeLetters = remainingLetters;
+        if (this.activeLetters[keyPressed]) {
+          this.activeLetters[keyPressed].destroy();
+          delete this.activeLetters[keyPressed];
+        }
       });
     }
   
     dropLetter() {
       const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      const randomLetter = letters.charAt(Phaser.Math.Between(0, letters.length - 1));
+      let randomLetter: string;
+      do {
+        randomLetter = letters.charAt(Phaser.Math.Between(0, letters.length - 1));
+      } while (this.activeLetters[randomLetter]);
       const { width } = this.scale;
       const columnWidth = width / 12;
       const validColumns = Object.keys(this.applesMap).map(Number);
@@ -55,19 +55,20 @@ export class MainScene extends Phaser.Scene {
       this.physics.add.existing(letter);
       const body = letter.body as Phaser.Physics.Arcade.Body;
       if (body) {
-        body.setVelocityY(300); // Increase the falling speed
+        body.setVelocityY(300);
       }
-  
-      this.activeLetters.push(letter);
-  
+
+      this.activeLetters[randomLetter] = letter;
+
       this.physics.add.overlap(letter, this.applesMap[columnIndex], (letterObj, appleObj) => {
+        const letterKey = letterObj.text.split('\n')[0].toUpperCase();
+        delete this.activeLetters[letterKey];
         if (this.applesMap[columnIndex]) {
           this.applesMap[columnIndex].destroy();
           delete this.applesMap[columnIndex];
           
-          // 检查是否所有苹果都被消除
           if (Object.keys(this.applesMap).length === 0) {
-            this.letterTimer.destroy(); // 停止字母下落定时器
+            this.letterTimer.destroy();
             this.endGame();
           }
         }
