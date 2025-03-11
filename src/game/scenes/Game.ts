@@ -18,6 +18,8 @@ export class MainScene extends Phaser.Scene {
 
   preload() {
     // Load any assets here if needed
+    this.load.audio('type', 'assets/sound/type.wav');
+    this.load.audio('wrong', 'assets/sound/wrong.mp3');
   }
 
   startGame() {
@@ -53,6 +55,9 @@ export class MainScene extends Phaser.Scene {
       if (this.activeLetters[keyPressed]) {
         this.activeLetters[keyPressed].destroy();
         delete this.activeLetters[keyPressed];
+        this.sound.play('type', { volume: 1 });
+      } else {
+        this.sound.play('wrong', { volume: 1 });
       }
     });
   }
