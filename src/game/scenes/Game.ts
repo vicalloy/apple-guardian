@@ -4,7 +4,6 @@ export class MainScene extends Phaser.Scene {
     private letterTimer: Phaser.Time.TimerEvent;
     private applesMap: { [key: number]: Phaser.GameObjects.Text } = {};
     private activeLetters: { [key: string]: Phaser.GameObjects.Text } = {};
-    private activeLettersSet: Set<string> = new Set();
   
     constructor() {
       super({ key: 'MainScene' });
