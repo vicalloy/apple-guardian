@@ -10,14 +10,13 @@ export class HomeScene extends Phaser.Scene {
   }
 
   create() {
-    // 添加背景图
     const bg = this.add.image(this.scale.width/2, this.scale.height/2, 'bg')
       .setOrigin(0.5);
     bg.setScale(this.scale.width/bg.width, this.scale.height/bg.height)
       .setDepth(-1);
 
     const { width, height } = this.scale;
-    
+
     let resultText;
     if (this.data.get('success') != undefined) {
       let hint = '';
@@ -36,7 +35,6 @@ export class HomeScene extends Phaser.Scene {
 
     const selectedLevel = this.data.get('selectedLevel');
 
-    // 创建Level显示
     const levelText = this.add.text(width / 2, height / 2 + 48, `Level ${selectedLevel}`, {
       fontSize: '28px',
       color: '#fff',
@@ -44,7 +42,6 @@ export class HomeScene extends Phaser.Scene {
       padding: { x: 10, y: 5 }
     }).setOrigin(0.5).setInteractive();
 
-    // 创建开始按钮
     const startButton = this.add.text(width / 2, height / 2, 'Start Game', {
       fontSize: '32px',
       color: '#fff',
@@ -52,8 +49,6 @@ export class HomeScene extends Phaser.Scene {
       padding: { x: 10, y: 5 },
     }).setOrigin(0.5);
 
-    // 创建界面容器
-    // 确保 resultText 不为 undefined，若为 undefined 则不添加到容器中
     const homeChildren = [levelText, startButton];
     if (resultText) {
       homeChildren.push(resultText);
@@ -61,12 +56,10 @@ export class HomeScene extends Phaser.Scene {
     const mainContainer = this.add.container(0, 0, homeChildren);
     const levelSelectContainer = this.add.container(width, 0);
 
-    // Level文本点击事件
     levelText.on('pointerdown', () => {
       mainContainer.setVisible(false);
       levelSelectContainer.setPosition(0, 0);
 
-      // 创建Level选择按钮
       const levelButtons = [];
       for (let i = 1; i <= 9; i++) {
         const btn = this.add.text(
@@ -90,7 +83,6 @@ export class HomeScene extends Phaser.Scene {
         levelButtons.push(btn);
       }
 
-      // 添加返回按钮
       const backButton = this.add.text(width / 2, height - 50, 'Back', {
         fontSize: '24px',
         color: '#fff',
@@ -106,14 +98,12 @@ export class HomeScene extends Phaser.Scene {
       levelSelectContainer.add([...levelButtons, backButton]);
     });
 
-    // 开始按钮点击事件
     startButton.setInteractive();
     startButton.on('pointerdown', () => {
       this.scene.start('MainScene', { level: this.data.get('selectedLevel') });
       this.scene.stop();
     });
 
-    // 触发场景就绪事件
     this.events.emit('current-scene-ready', this);
   }
 
