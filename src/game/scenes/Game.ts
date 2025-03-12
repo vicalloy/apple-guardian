@@ -22,6 +22,8 @@ export class MainScene extends Phaser.Scene {
     // Load any assets here if needed
     this.load.audio('type', 'assets/sound/type.wav');
     this.load.audio('wrong', 'assets/sound/wrong.mp3');
+    this.load.audio('win', 'assets/sound/win.mp3');
+    this.load.audio('lose', 'assets/sound/lose.mp3');
   }
 
   isGameOver() {
@@ -181,6 +183,11 @@ export class MainScene extends Phaser.Scene {
   endGame() {
     this.letterTimer.destroy();
     const hasSuccess = Object.keys(this.applesMap).length > 0;
+    if (hasSuccess) {
+      this.sound.play('win');
+    } else {
+      this.sound.play('lose');
+    }
     this.scene.start('HomeScene', { success: hasSuccess, level: this.data.get('level') });
     this.scene.stop();
   }
