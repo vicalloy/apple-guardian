@@ -3,7 +3,7 @@
 A fast-paced typing practice game.
 
 As apples fall from the sky, pesky bugs swarm in to devour them. Quickly type the correct characters to eliminate the pests before 
-they reach your precious fruit. With each level, the challenge grows—faster bugs, trickier words, and more apples to protect.
+they reach your precious fruit.
 
 Play: https://vicalloy.github.io/letter-fall/
 
